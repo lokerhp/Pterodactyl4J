@@ -55,14 +55,19 @@ public class PteroApplicationImpl implements PteroApplication {
 
 	@Override
 	public PaginationAction<ApplicationUser> retrieveUsers() {
+		return retrieveUsers("");
+	}
+
+	@Override
+	public PaginationAction<ApplicationUser> retrieveUsers(String additionalFilter) {
 		return PaginationResponseImpl.onPagination(
-				api, Route.Users.LIST_USERS.compile(), (object) -> new ApplicationUserImpl(object, this));
+				api, Route.Users.LIST_USERS.compile(additionalFilter), (object) -> new ApplicationUserImpl(object, this));
 	}
 
 	@Override
 	public PteroAction<List<ApplicationUser>> retrieveUsersByUsername(String name, boolean caseSensitive) {
 		return PteroActionImpl.onExecute(api, () -> {
-			Stream<ApplicationUser> users = retrieveUsers().stream();
+			Stream<ApplicationUser> users = retrieveUsers("&username=" + name).stream();
 
 			if (caseSensitive) {
 				users = users.filter(u -> u.getUserName().contains(name));
@@ -77,7 +82,9 @@ public class PteroApplicationImpl implements PteroApplication {
 	@Override
 	public PteroAction<List<ApplicationUser>> retrieveUsersByEmail(String email, boolean caseSensitive) {
 		return PteroActionImpl.onExecute(api, () -> {
-			Stream<ApplicationUser> users = retrieveUsers().stream();
+
+
+			Stream<ApplicationUser> users = retrieveUsers("&email=" + email).stream();
 
 			if (caseSensitive) {
 				users = users.filter(u -> u.getEmail().contains(email));

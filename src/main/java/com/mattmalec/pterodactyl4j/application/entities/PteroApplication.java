@@ -37,8 +37,11 @@ public interface PteroApplication {
 	 * <br>This requires an <b>Application API key</b> with the <b>Users</b> permission with <b>Read</b> access.
 	 *
 	 * @return {@link com.mattmalec.pterodactyl4j.PteroAction PteroAction} - Type {@link java.util.List List} of {@link com.mattmalec.pterodactyl4j.application.entities.ApplicationUser ApplicationUsers}
+	 * @param query Possible query to search for (username, email, uuid or external_id)
 	 */
 	PaginationAction<ApplicationUser> retrieveUsers();
+
+	PaginationAction<ApplicationUser> retrieveUsers(String query);
 
 	/**
 	 * Retrieves an individual ApplicationUser represented by the provided id from Pterodactyl instance
